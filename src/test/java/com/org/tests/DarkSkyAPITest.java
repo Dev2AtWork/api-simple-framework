@@ -25,7 +25,7 @@ public class DarkSkyAPITest {
 	 */
 	@BeforeClass
 	public void callAPI() {
-		System.out.println("Executing Before...");
+
 		response = given().baseUri(Constants.BASE_URL + "/" + Constants.AUTH_KEY).log().everything()
 				.contentType(ContentType.JSON).when().get("/" + Constants.COORDINATES).then()
 				.contentType(ContentType.JSON).statusCode(200).extract().response();
@@ -40,7 +40,6 @@ public class DarkSkyAPITest {
 			HashMap<String, Object> res = response.body().jsonPath().get("$");
 			HashMap<String, String> schema = SchemaDataProvider.getTestData();
 			for (String key : schema.keySet()) {
-				// assertTrue(schema.get(key).equalsIgnoreCase(getDataType(res.get(key))));
 				Assert.assertTrue(schema.get(key).equalsIgnoreCase(getDataType(res.get(key))));
 			}
 		} catch (Exception e) {
