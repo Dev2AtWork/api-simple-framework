@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -39,7 +40,8 @@ public class DarkSkyAPITest {
 			HashMap<String, Object> res = response.body().jsonPath().get("$");
 			HashMap<String, String> schema = SchemaDataProvider.getTestData();
 			for (String key : schema.keySet()) {
-				assertTrue(schema.get(key).equalsIgnoreCase(getDataType(res.get(key))));
+				// assertTrue(schema.get(key).equalsIgnoreCase(getDataType(res.get(key))));
+				Assert.assertTrue(schema.get(key).equalsIgnoreCase(getDataType(res.get(key))));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -56,9 +58,8 @@ public class DarkSkyAPITest {
 		try {
 			HashMap<String, String> testData = JsonArrTestDataProvider.getTestData();
 			for (String key : testData.keySet()) {
-				assertTrue("Array Size Validation for " + key,
-						((ArrayList<Object>) response.body().jsonPath().get(key + ".data")).size() == Integer
-								.parseInt(testData.get(key)));
+				Assert.assertTrue(((ArrayList<Object>) response.body().jsonPath().get(key + ".data")).size() == Integer
+						.parseInt(testData.get(key)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -70,9 +71,13 @@ public class DarkSkyAPITest {
 	 */
 	@Test
 	public void validateCoordinatesInResponse() {
-		assertTrue("Validation of coordinates in response",
+		try {
+		Assert.assertTrue(
 				(response.body().jsonPath().get("latitude") + "," + response.body().jsonPath().get("longitude"))
 						.equalsIgnoreCase(Constants.COORDINATES));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public String getDataType(Object obj) {
